@@ -7,6 +7,7 @@ public class Main : MonoBehaviour {
     [Header("Menu UI")]
     public GameObject menuUI;
     public Button playBtn;
+    public Text record;
 
     [Header("Game UI")]
     public GameObject gameUI;
@@ -23,8 +24,16 @@ public class Main : MonoBehaviour {
     private GameObject platformInstance;
 
     // Use this for initialization
+
+    void Awake()
+    {
+        if(!PlayerPrefs.HasKey("Score"))
+        {
+            PlayerPrefs.SetInt("Score", 0);
+        }
+    }
     void Start () {
-		
+        ShowRecord();
 	}
 	
 	// Update is called once per frame
@@ -43,6 +52,10 @@ public class Main : MonoBehaviour {
                 print("Waiting to creating ball");
             }
         }
+    }
+    public void ShowRecord()
+    {
+        record.text = PlayerPrefs.GetInt("Score").ToString();
     }
     public void Play()
     {
@@ -85,7 +98,12 @@ public class Main : MonoBehaviour {
     public void LoseGame()
     {
         resultPanel.SetActive(true);
-        scoreResult.text = ballInstance.Score.ToString();
+        int score = ballInstance.Score;
+        scoreResult.text = score.ToString();
+        if(score > PlayerPrefs.GetInt("Score"))
+        {
+            PlayerPrefs.SetInt("Score", score);
+        }
         Destroy(ballInstance.gameObject);
         Destroy(platformInstance);
     }
@@ -97,5 +115,6 @@ public class Main : MonoBehaviour {
     {
         gameUI.SetActive(false);
         StartCoroutine(LoadMenu());
+        ShowRecord();
     }
 }
