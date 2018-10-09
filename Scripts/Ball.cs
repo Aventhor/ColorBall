@@ -39,7 +39,7 @@ public class Ball : MonoBehaviour {
             }
             else
             {
-                //LoseGame();
+                LoseGame();
             }
         }
     }
